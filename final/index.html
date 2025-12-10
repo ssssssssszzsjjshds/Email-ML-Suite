@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="az">
+  <head>
+    <meta charset="utf-8" />
+    <title>Email ML Suite — SVM · RandomForest · DBSCAN</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="stylesheet" href="style3.css" />
+  </head>
+  <body>
+    <div class="page">
+      <div class="container" role="application" aria-labelledby="appTitle">
+        <header class="header">
+          <div>
+            <h1 id="appTitle">Email ML Suite</h1>
+            <p class="lead">
+              Three models — SVM (spam), Random Forest (phishing), DBSCAN
+              (grouping & anomalies). Paste an email and switch tabs to run
+              different analyses.
+            </p>
+          </div>
+
+          <nav class="model-tabs" role="tablist" aria-label="Models">
+            <button
+              id="tab-svm"
+              class="tab-btn active"
+              role="tab"
+              aria-selected="true"
+              aria-controls="panel-svm"
+            >
+              SVM (Spam)
+            </button>
+            <button
+              id="tab-rf"
+              class="tab-btn"
+              role="tab"
+              aria-selected="false"
+              aria-controls="panel-rf"
+            >
+              Random Forest (Phishing)
+            </button>
+            <button
+              id="tab-dbscan"
+              class="tab-btn"
+              role="tab"
+              aria-selected="false"
+              aria-controls="panel-dbscan"
+            >
+              DBSCAN (Grouping)
+            </button>
+          </nav>
+        </header>
+
+        <main class="grid-container" id="mainGrid">
+          <!-- LEFT: Shared input area -->
+          <section class="left-panel" aria-label="Input">
+            <label for="sharedEmailInput" class="label"
+              >E-poçt mətnini yapışdırın</label
+            >
+            <textarea
+              id="sharedEmailInput"
+              placeholder="Subject: ...&#10;&#10;E-poçt mətnini buraya yapışdırın..."
+              rows="12"
+            ></textarea>
+
+            <div class="controls">
+              <button id="predict-switch" class="predict-btn">
+                Yoxla (Aktiv model)
+              </button>
+              <button
+                id="pasteSpamExample"
+                class="ghost-btn"
+                title="Paste spam example"
+              >
+                Spam nümunəsi
+              </button>
+              <button
+                id="pasteHamExample"
+                class="ghost-btn"
+                title="Paste genuine example"
+              >
+                Genuine nümunə
+              </button>
+            </div>
+
+            <div class="meta-controls">
+              <details>
+                <summary>Metadata / Advanced (pass to models)</summary>
+                <div class="meta-grid">
+                  <label
+                    >From domain:
+                    <input
+                      id="meta-fromDomain"
+                      type="text"
+                      placeholder="example.com"
+                  /></label>
+                  <label
+                    >Reply-To domain:
+                    <input
+                      id="meta-replyDomain"
+                      type="text"
+                      placeholder="reply.example.com"
+                  /></label>
+                  <label
+                    >Attachment: <input id="meta-hasAttachment" type="checkbox"
+                  /></label>
+                  <label
+                    >Sender reputation:
+                    <input
+                      id="meta-senderRep"
+                      type="range"
+                      min="0"
+                      max="1"
+                      step="0.01"
+                      value="0.5"
+                    />
+                    <span id="meta-senderRepVal">0.50</span>
+                  </label>
+                </div>
+              </details>
+            </div>
+          </section>
+
+          <!-- RIGHT: Model panels -->
+          <aside class="right-panel">
+            <!-- SVM Panel -->
+            <section
+              id="panel-svm"
+              class="model-panel"
+              role="tabpanel"
+              aria-labelledby="tab-svm"
+            >
+              
+              <div id="svm-result" class="prediction-result">
+                <div class="icon-wrap" aria-hidden="true"></div>
+                <div class="text">
+                  <div class="title">SVM nəticəsi gözlənilir</div>
+                  <div class="sub">
+                    SVM istifadə edərək spam/ham təyini üçün "Yoxla" düyməsini
+                    basın.
+                  </div>
+                </div>
+              </div>
+              <div class="model-extra">
+                <h4>Features preview</h4>
+                <pre id="svm-featurePreview" class="feature-preview">
+(əvvəlcə model yükləndikdə görünəcək)</pre
+                >
+              </div>
+            </section>
+
+            <!-- Random Forest Panel -->
+            <section
+              id="panel-rf"
+              class="model-panel hidden"
+              role="tabpanel"
+              aria-labelledby="tab-rf"
+            >
+              <div id="rf-status" class="model-status">
+                RandomForest: model yox
+              </div>
+
+              <div class="rf-params">
+                <label
+                  >N_estimators:
+                  <input id="rf-nEstimators" type="number" min="1" value="100"
+                /></label>
+                <label
+                  >max_depth:
+                  <input id="rf-maxDepth" type="number" min="0" value="0"
+                /></label>
+                <label
+                  >Threshold (spam decision):
+                  <input
+                    id="rf-threshold"
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value="0.5"
+                  /><span id="rf-thresholdVal">0.50</span></label
+                >
+              </div>
+
+              <div style="margin-top: 10px">
+                
+              </div>
+
+              <div
+                id="rf-result"
+                class="prediction-result"
+                style="margin-top: 12px"
+              >
+                <div class="icon-wrap" aria-hidden="true"></div>
+                <div class="text">
+                  <div class="title">RandomForest nəticəsi gözlənilir</div>
+                  <div class="sub">
+                    Phishing aşkarlanması üçün "Yoxla" düyməsini basın.
+                  </div>
+                </div>
+              </div>
+
+              <div class="model-extra">
+                <h4>RF model info</h4>
+                <div id="rf-info" class="info-box">
+                  Model yüklənmədi. rf_model.json faylını sayt kök qovluğuna
+                  qoyun (və ya konsoldan window.rfLoadFrom('/your.json')
+                  çağırın).
+                </div>
+                <div id="rf-featureImportances" class="feature-preview"></div>
+              </div>
+            </section>
+
+            <!-- DBSCAN Panel -->
+            <section
+              id="panel-dbscan"
+              class="model-panel hidden"
+              role="tabpanel"
+              aria-labelledby="tab-dbscan"
+            >
+              <div id="dbscan-status" class="model-status">
+                DBSCAN hazır deyil
+              </div>
+
+              <div class="dbscan-params">
+                <label
+                  >eps:
+                  <input
+                    id="dbscan-eps"
+                    type="number"
+                    step="0.1"
+                    min="0.1"
+                    value="2.0"
+                /></label>
+                <label
+                  >minPts:
+                  <input id="dbscan-minPts" type="number" min="1" value="4"
+                /></label>
+                <div class="dbscan-actions">
+                  <input id="dbscan-upload" type="file" accept=".json,.csv" />
+                  <button id="dbscan-run" class="ghost-btn">
+                    Run clustering on uploaded dataset
+                  </button>
+                  <button id="dbscan-assign" class="ghost-btn">
+                    Assign current email to clusters
+                  </button>
+                </div>
+              </div>
+
+              <div id="dbscan-result" class="prediction-result">
+                <div class="icon-wrap" aria-hidden="true"></div>
+                <div class="text">
+                  <div class="title">DBSCAN nəticəsi gözlənilir</div>
+                  <div class="sub">
+                    Batch clustering üçün dataset yükləyin və ya mövcud datasetə
+                    əsaslanaraq test edin.
+                  </div>
+                </div>
+              </div>
+
+              <div class="model-extra">
+                <h4>Clusters / Examples</h4>
+                <div id="dbscan-clusters">Heç bir cluster yoxdur.</div>
+              </div>
+            </section>
+          </aside>
+        </main>
+
+       
+      </div>
+    </div>
+
+    <!-- Libraries and app script (scripts implemented next) -->
+    <script src="https://unpkg.com/ml-svm@6.1.0/dist/ml-svm.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ml-svm@6.1.0/lib/index.js"></script>
+
+    <!-- feature extractor first -->
+    <script src="features.js"></script>
+
+    <!-- adapter depends on features.js; must be available before main_models runs -->
+    <script src="rf_feature_adapter.js"></script>
+
+    <!-- RF predictor & loader must be available before main_models (auto-load + predict) -->
+    <script src="rf_predictor.js"></script>
+    <script src="rf_loader.js"></script>
+
+    <!-- DBSCAN implementation -->
+    <script src="dbscan.js"></script>
+
+    <!-- UI/tabbing -->
+    <script src="main_multi.js"></script>
+
+    <!-- wires models -> UI and performs predictions (must come after the adapter and RF loader) -->
+    <script src="main_models.js"></script>
+  </body>
+</html>

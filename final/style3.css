@@ -1,0 +1,573 @@
+/* style3.css - Darker centered theme, tighter spacing, visible inline SVG icons
+   UPDATED: ensure tab panels actually hide/show by styling .model-panel and .hidden
+*/
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+:root {
+    --bg: #0b1220;
+    --panel: #0f1724;
+    --muted: #9aa4b2;
+    --accent: #7c3aed;
+    /* deeper purple */
+    --accent-2: #06b6d4;
+    --success: #10b981;
+    --danger: #ef4444;
+    --card: linear-gradient(180deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.01));
+    --radius: 14px;
+    --shadow-lg: 0 10px 30px rgba(2, 6, 23, 0.6);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    color: #e6eef8;
+    background: radial-gradient(1200px 400px at 10% 20%, rgba(124, 58, 237, 0.08), transparent), linear-gradient(180deg, #071028 0%, #071327 100%);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Page centers everything perfectly */
+.page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 28px;
+}
+
+/* Main container */
+.container {
+    width: 980px;
+    max-width: calc(100% - 48px);
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    transform: translateZ(0);
+}
+
+/* Header */
+.header {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    margin-bottom: 10px;
+    justify-content: space-between;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 1.35rem;
+    color: #f8fafc;
+}
+
+.lead {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.25;
+}
+
+/* Tabs */
+.model-tabs {
+    display: flex;
+    gap: 8px;
+}
+
+.tab-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    color: var(--muted);
+    padding: 8px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.tab-btn.active {
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    color: #071327;
+    box-shadow: 0 8px 20px rgba(124, 58, 237, 0.12);
+}
+
+.tab-btn:focus {
+    outline: 3px solid rgba(124, 58, 237, 0.12);
+    outline-offset: 3px;
+}
+
+/* Grid layout */
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 18px;
+    align-items: start;
+}
+
+/* Panels */
+.left-panel,
+.right-panel {
+    background: rgba(255, 255, 255, 0.02);
+    padding: 14px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* Model panels inside right-panel */
+.model-panel {
+    /* make panels stack within the right column but controlled via .hidden */
+    display: block;
+    transition: opacity 180ms ease, transform 180ms ease;
+}
+
+/* Hidden class really hides the panel */
+.model-panel.hidden {
+    display: none !important;
+    opacity: 0;
+    transform: translateY(6px);
+}
+
+/* Left */
+.label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #dbeafe;
+}
+
+textarea#sharedEmailInput {
+    width: 100%;
+    min-height: 220px;
+    resize: vertical;
+    padding: 12px 14px;
+    font-size: 14px;
+    line-height: 1.45;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    background: rgba(0, 0, 0, 0.18);
+    color: #e6eef8;
+    transition: border-color 160ms ease, box-shadow 160ms ease;
+    outline: none;
+    font-family: inherit;
+
+}
+
+/* Buttons */
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: flex-start;
+}
+
+.controls button {
+    flex: 1 1 140px;
+    /* allows buttons to grow/shrink but have a min width */
+    min-width: 120px;
+}
+
+.predict-btn {
+    padding: 10px 16px;
+    background: linear-gradient(90deg, var(--accent), var(--accent-2));
+    color: #071327;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(124, 58, 237, 0.18);
+}
+
+.ghost-btn {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    padding: 8px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.predict-btn:hover {
+    transform: translateY(-2px);
+}
+
+.ghost-btn:hover {
+    background: rgba(255, 255, 255, 0.01);
+    color: #e6eef8;
+}
+
+/* Result card - denser and centered content */
+.prediction-result {
+    min-height: 220px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 18px;
+    border-radius: 12px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.0));
+    text-align: left;
+    color: #e6eef8;
+    transition: box-shadow 180ms ease, transform 180ms ease;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+/* Icon wrap */
+.icon-wrap {
+    width: 72px;
+    height: 72px;
+    min-width: 72px;
+    min-height: 72px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.02);
+    box-shadow: 0 6px 20px rgba(2, 6, 23, 0.6);
+}
+
+/* Ensure SVGs scale nicely */
+.icon-wrap svg {
+    width: 56px;
+    height: 56px;
+    display: block;
+}
+
+/* Text area inside result */
+.prediction-result .text {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.prediction-result .title {
+    font-weight: 700;
+    font-size: 1.05rem;
+    color: #f8fafc;
+}
+
+.prediction-result .sub {
+    font-weight: 600;
+    color: var(--muted);
+    font-size: 0.92rem;
+}
+
+/* Spam and Ham styles via classes (no inline colors required) */
+.prediction-result.is-spam {
+    border-left: 6px solid rgba(239, 68, 68, 0.14);
+    box-shadow: 0 18px 40px rgba(239, 68, 68, 0.06);
+    background: linear-gradient(180deg, rgba(124, 34, 46, 0.06), rgba(0, 0, 0, 0.02));
+}
+
+.prediction-result.is-spam .icon-wrap {
+    background: linear-gradient(180deg, rgba(239, 68, 68, 0.08), rgba(124, 34, 46, 0.04));
+}
+
+.prediction-result.is-spam svg path {
+    stroke: var(--danger);
+}
+
+.prediction-result.is-ham {
+    border-left: 6px solid rgba(16, 185, 129, 0.12);
+    box-shadow: 0 18px 40px rgba(16, 185, 129, 0.05);
+    background: linear-gradient(180deg, rgba(10, 78, 58, 0.06), rgba(0, 0, 0, 0.02));
+}
+
+.prediction-result.is-ham .icon-wrap {
+    background: linear-gradient(180deg, rgba(16, 185, 129, 0.08), rgba(6, 95, 70, 0.02));
+}
+
+.prediction-result.is-ham svg path {
+    stroke: var(--success);
+}
+
+/* Pending/default */
+.prediction-result:not(.is-spam):not(.is-ham) {
+    border-left: 6px solid rgba(255, 255, 255, 0.02);
+}
+
+/* Model status and extras */
+.model-status {
+    color: var(--muted);
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.model-extra {
+    margin-top: 12px;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
+
+.feature-preview,
+.info-box,
+#dbscan-clusters,
+#rf-featureImportances {
+    background: rgba(255, 255, 255, 0.01);
+    padding: 8px;
+    border-radius: 8px;
+    font-family: monospace;
+    color: #dbeafe;
+    max-height: 180px;
+    overflow: auto;
+}
+
+/* Hints */
+.hint {
+    margin-top: 10px;
+    color: var(--muted);
+    font-size: 0.88rem;
+}
+
+.meta-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+}
+
+#meta-senderRep {
+    width: 100%;
+}
+
+/* Responsive: stack on small screens */
+@media (max-width: 860px) {
+    .grid-container {
+        grid-template-columns: 1fr;
+    }
+
+    .prediction-result {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .prediction-result .text {
+        align-items: center;
+    }
+
+    .icon-wrap {
+        margin-bottom: 6px;
+    }
+
+    .header {
+        flex-direction: column;
+        gap: 6px;
+    }
+}
+
+/* Subtle entrance */
+.container {
+    transform: translateY(6px);
+    animation: appear 260ms ease both;
+}
+
+@keyframes appear {
+    from {
+        transform: translateY(10px);
+        opacity: 0
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1
+    }
+}
+
+.dbscan-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.dbscan-actions button,
+.dbscan-actions input[type="file"] {
+    flex: 1 1 140px;
+    min-width: 120px;
+}
+
+
+.dbscan-actions button,
+.dbscan-actions input[type="file"] {
+    flex: 1 1 140px;
+    min-width: 120px;
+}
+
+/* DBSCAN cluster cards */
+.dbscan-cluster {
+    background: rgba(255, 255, 255, 0.02);
+    margin-bottom: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.dbscan-cluster strong {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 0.95rem;
+    color: var(--accent);
+}
+
+.dbscan-cluster ul {
+    margin: 0;
+    padding-left: 16px;
+}
+
+.dbscan-cluster li {
+    font-size: 0.88rem;
+    color: #dbeafe;
+    margin-bottom: 3px;
+}
+
+/* Summary row at top */
+.dbscan-summary {
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+.dbscan-summary span {
+    margin-right: 12px;
+}
+
+@media (max-width: 600px) {
+
+    .controls button,
+    .dbscan-actions button,
+    .dbscan-actions input[type="file"] {
+        flex: 1 1 100%;
+    }
+
+    .meta-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .model-tabs {
+        display: flex;
+        flex-direction: column;
+        align-content: center;
+        width: 100%;
+        gap: 8px;
+    }
+}
+
+
+
+/* DBSCAN parameters container */
+.dbscan-params {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+/* DBSCAN labels and inputs */
+.dbscan-params label {
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+    color: #dbeafe;
+    font-size: 0.9rem;
+}
+
+/* Inputs inside labels */
+.dbscan-params input[type="number"] {
+    margin-top: 4px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    background: rgba(0, 0, 0, 0.15);
+    color: #e6eef8;
+    font-family: inherit;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.rf-params {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+/* DBSCAN labels and inputs */
+.rf-params label {
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+    color: #dbeafe;
+    font-size: 0.9rem;
+}
+
+/* Inputs inside labels */
+.rf-params input[type="number"] {
+    margin-top: 4px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    background: rgba(0, 0, 0, 0.15);
+    color: #e6eef8;
+    font-family: inherit;
+    width: 100%;
+    box-sizing: border-box;
+}
+/* DBSCAN action buttons and file input */
+.dbscan-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+/* Make file input and buttons consistent in height and style */
+.dbscan-actions input[type="file"],
+.dbscan-actions button {
+    flex: 1 1 180px;
+    /* grow/shrink but have a minimum width */
+    min-width: 140px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    background: rgba(255, 255, 255, 0.02);
+    color: #dbeafe;
+    text-align: center;
+    transition: background 150ms ease, transform 150ms ease;
+}
+
+/* Hover/focus effects for buttons and file input */
+.dbscan-actions button:hover,
+.dbscan-actions input[type="file"]:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-1px);
+}
+
+/* Specific ghost button style */
+.dbscan-actions button.ghost-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    color: var(--muted);
+}
+
+.dbscan-actions button.ghost-btn:hover {
+    background: rgba(255, 255, 255, 0.01);
+    color: #e6eef8;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+
+    .dbscan-actions input[type="file"],
+    .dbscan-actions button {
+        flex: 1 1 100%;
+        /* stack buttons full-width */
+    }
+}
