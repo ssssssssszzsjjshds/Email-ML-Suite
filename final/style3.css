@@ -1,4 +1,4 @@
-/* style3-responsive.css - Fully flexible, mobile-first, dark theme */
+/* style3-responsive.css - Dark theme, cards on desktop, flexible on mobile */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
 
@@ -10,11 +10,11 @@
     --accent-2: #06b6d4;
     --success: #10b981;
     --danger: #ef4444;
-    --radius: 12px;
+    --radius: 14px;
     --shadow-lg: 0 10px 30px rgba(2, 6, 23, 0.6);
 }
 
-/* Reset and global styles */
+/* Reset */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -27,9 +27,7 @@ body {
     background: radial-gradient(1200px 400px at 10% 20%, rgba(124, 58, 237, 0.08), transparent),
         linear-gradient(180deg, #071028 0%, #071327 100%);
     color: #e6eef8;
-    height: 100%;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    min-height: 100%;
 }
 
 /* Page wrapper */
@@ -37,51 +35,58 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
-    min-height: 100vh;
     padding: 20px;
 }
 
-/* Container */
+/* Container: card style on desktop */
 .container {
     display: flex;
     flex-direction: column;
     width: 100%;
-    max-width: 100%;
-    padding: 0;
+    max-width: 980px;
+    background: var(--panel);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    transition: all 180ms ease;
 }
 
 /* Header */
 .header {
     display: flex;
-    flex-direction: column;
-    gap: 6px;
-    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
     margin-bottom: 12px;
 }
 
 .header h1 {
-    font-size: 1.4rem;
+    font-size: 1.35rem;
     color: #f8fafc;
 }
 
 .lead {
-    font-size: 0.95rem;
     color: var(--muted);
+    font-size: 0.95rem;
 }
 
 /* Tabs */
 .model-tabs {
     display: flex;
+    gap: 8px;
     flex-wrap: wrap;
-    gap: 6px;
     margin-bottom: 12px;
 }
 
+
+
 .tab-btn {
     padding: 8px 12px;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
     background: transparent;
     color: var(--muted);
     font-weight: 600;
@@ -94,28 +99,29 @@ body {
     color: #071327;
 }
 
-/* Layout grid */
+/* Grid layout */
 .grid-container {
     display: flex;
     flex-direction: row;
-    gap: 12px;
-    width: 100%;
+    gap: 18px;
     flex-wrap: wrap;
 }
 
+/* Panels: card style on desktop */
 .left-panel,
 .right-panel {
+    flex: 1 1 360px;
     display: flex;
     flex-direction: column;
     gap: 12px;
-    padding: 12px;
     background: var(--panel);
     border-radius: var(--radius);
+    padding: 14px;
     border: 1px solid rgba(255, 255, 255, 0.03);
-    flex: 1 1 300px;
+    box-shadow: var(--shadow-lg);
 }
 
-/* Model panel inside right */
+/* Panels inside right */
 .model-panel {
     display: block;
     transition: all 180ms ease;
@@ -142,7 +148,7 @@ input[type="number"],
 textarea {
     margin-top: 4px;
     padding: 8px 10px;
-    border-radius: var(--radius);
+    border-radius: 10px;
     border: 1px solid rgba(255, 255, 255, 0.04);
     background: rgba(0, 0, 0, 0.15);
     color: #e6eef8;
@@ -154,7 +160,7 @@ textarea {
 /* Buttons */
 button {
     padding: 10px 14px;
-    border-radius: var(--radius);
+    border-radius: 10px;
     border: none;
     cursor: pointer;
     font-weight: 600;
@@ -172,16 +178,16 @@ button {
 
 .ghost-btn {
     background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.03);
     color: var(--muted);
 }
 
 .ghost-btn:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.01);
     color: #e6eef8;
 }
 
-/* Controls and DBSCAN actions flex */
+/* Controls and DBSCAN actions */
 .controls,
 .dbscan-actions {
     display: flex;
@@ -201,20 +207,21 @@ button {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
-    padding: 12px;
     gap: 12px;
     width: 100%;
+    padding: 14px;
     border-radius: var(--radius);
-    border-left: 4px solid rgba(255, 255, 255, 0.02);
-    background: transparent;
+    border-left: 6px solid rgba(255, 255, 255, 0.02);
+    background: var(--panel);
+    box-shadow: var(--shadow-lg);
 }
 
 .icon-wrap {
     width: 56px;
     height: 56px;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 }
 
 .prediction-result .text {
@@ -223,7 +230,6 @@ button {
     gap: 4px;
 }
 
-/* Spam/Ham variants */
 .prediction-result.is-spam {
     border-left-color: var(--danger);
 }
@@ -232,12 +238,12 @@ button {
     border-left-color: var(--success);
 }
 
-/* Feature boxes, clusters, meta grid */
+/* Feature boxes, clusters */
 .feature-preview,
 .info-box,
 #dbscan-clusters,
 #rf-featureImportances {
-    padding: 6px;
+    padding: 8px;
     border-radius: var(--radius);
     background: rgba(255, 255, 255, 0.02);
     font-family: monospace;
@@ -246,18 +252,12 @@ button {
     overflow-x: auto;
 }
 
-.meta-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-
 /* DBSCAN clusters */
 .dbscan-cluster {
     padding: 8px 10px;
     border-radius: var(--radius);
     border: 1px solid rgba(255, 255, 255, 0.04);
-    background: rgba(255, 255, 255, 0.01);
+    background: rgba(255, 255, 255, 0.02);
     width: 100%;
 }
 
@@ -265,19 +265,27 @@ button {
     color: var(--accent);
 }
 
-/* Mobile adjustments */
+/* Mobile adjustments: remove cards, stack everything */
 @media (max-width: 800px) {
-    .grid-container {
-        flex-direction: column;
+    .container {
+        background: transparent;
+        box-shadow: none;
+        border: none;
+        padding: 0;
     }
 
     .left-panel,
     .right-panel {
-        flex: 1 1 100%;
-        border-radius: 0;
-        border: none;
-        padding: 8px 0;
         background: transparent;
+        border: none;
+        box-shadow: none;
+        padding: 0;
+        flex: 1 1 100%;
+    }
+
+    .grid-container {
+        flex-direction: column;
+        gap: 10px;
     }
 
     .prediction-result {
@@ -285,19 +293,17 @@ button {
         align-items: center;
         text-align: center;
         border-left: none;
+        box-shadow: none;
     }
 
     .icon-wrap {
         margin-bottom: 6px;
     }
 
-    .tab-btn {
-        flex: 1 1 100%;
-    }
-
     .controls button,
     .dbscan-actions button,
     .dbscan-actions input[type="file"] {
         flex: 1 1 100%;
+        min-width: unset;
     }
 }
